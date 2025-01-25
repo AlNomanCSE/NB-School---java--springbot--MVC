@@ -12,4 +12,9 @@ public class HomeController {
         model.addAttribute("username", "Abdullah");
         return "home.html";
     }
+
+    @RequestMapping(value = {"/contact"})
+    public String contactController() {
+        return "contact.html";
+    }
 }
