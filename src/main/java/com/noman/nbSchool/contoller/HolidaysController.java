@@ -26,7 +26,6 @@ public class HolidaysController {
                 new Holiday("Feb 21", "International Mother Language Day", Holiday.Type.FEDERAL),
                 new Holiday("Dec 14", "Martyred Intellectuals Day", Holiday.Type.FEDERAL)
         );
-        System.out.println(holidays.stream().filter(h -> h.getType() == Holiday.Type.FEDERAL));
         List<Holiday> federalHolidays = holidays.stream().filter(h -> h.getType() == Holiday.Type.FEDERAL).collect(Collectors.toList());
         List<Holiday> festivalHolidays = holidays.stream().filter(h -> h.getType() == Holiday.Type.FESTIVAL).collect(Collectors.toList());
         model.addAttribute("FESTIVAL", festivalHolidays);
