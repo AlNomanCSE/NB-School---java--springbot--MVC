@@ -29,7 +29,7 @@ public class ContactController {
 
     @RequestMapping(value = "/saveMsg", method = POST)
     public ModelAndView saveMessaage(Contact contact) {
-         contactService.saveMessageDetails(contact);
+        contactService.saveMessageDetails(contact);
         return new ModelAndView("redirect:/contact");
     }
 
