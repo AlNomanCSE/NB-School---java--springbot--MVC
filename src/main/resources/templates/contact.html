@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
@@ -42,25 +41,29 @@
     </div>
     <div class="row contact-block">
       <div class="col-md-7 contact-right">
-        <form th:action="@{/saveMsg}" method="post" class="signin-form">
+        <ul>
+          <li class="alert alert-danger" role="alert"
+              th:each="error : ${#fields.errors('contact.*')}" th:text="${error}" />
+        </ul>
+        <form th:action="@{/saveMsg}" method="POST"  th:object="${contact}">
           <div class="input-grids">
             <div class="row">
               <div class="col-sm-6">
-                <input type="text" name="name" id="name" placeholder="Your Name"
+                <input type="text" th:field="*{name}" placeholder="Your Name"
                        class="contact-input" />
               </div>
               <div class="col-sm-6">
-                <input type="text" name="mobileNum" id="mobileNum" placeholder="Your Mobile Number"
+                <input type="text" th:field="*{mobileNum}" placeholder="Your Mobile Number"
                        class="contact-input" />
               </div>
             </div>
-            <input type="text" name="email" id="email" placeholder="Your Email"
+            <input type="text" th:field="*{email}" placeholder="Your Email"
                    class="contact-input" />
-            <input type="text" name="subject" id="subject" placeholder="Subject"
+            <input type="text" th:field="*{subject}" placeholder="Subject"
                    class="contact-input" />
           </div>
           <div class="form-input">
-            <textarea name="message" id="message" placeholder="Type your message here"></textarea>
+            <textarea th:field="*{message}" placeholder="Type your message here"></textarea>
           </div>
           <div class="text-start">
             <button class="btn btn-style btn-style-3">Send Message</button>
@@ -76,7 +79,7 @@
               </div>
               <div class="cont-right">
                 <h6>School Address</h6>
-                <p>NB School,KHULNA - 9802.</p>
+                <p>NB School,KHULNA ,9802.</p>
               </div>
             </div>
             <div class="d-flex contact-grid mt-4 pt-lg-2">
