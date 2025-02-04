@@ -3,6 +3,7 @@ package com.noman.nbSchool.contoller;
 
 import com.noman.nbSchool.model.Contact;
 import com.noman.nbSchool.service.ContactService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,14 @@ public class ContactController {
         this.contactService = contactService;
     }
 
-    @RequestMapping(value = "/contact")
-    public String contactPage(Model model) {
+    @RequestMapping(value = "contact")
+    public String contactPage(HttpServletRequest req, Model model) {
+        model.addAttribute("request", req);
         model.addAttribute("contact", new Contact());
         return "contact.html";
     }
 
-    @RequestMapping(value = "/saveMsg",method = POST)
+    @RequestMapping(value = "saveMsg",method = POST)
     public String saveMessage(@Valid @ModelAttribute("contact") Contact contact, Errors errors){
 
         if(errors.hasErrors()){

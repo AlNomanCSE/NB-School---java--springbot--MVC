@@ -15,10 +15,13 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/home","/about","/courses","/error","/assets/**").permitAll()
-                .requestMatchers(HttpMethod.GET,"/contact").authenticated()
-                .requestMatchers(HttpMethod.GET,"/holidays/**").permitAll()
+                .requestMatchers(HttpMethod.GET,"contact").authenticated()
+                .requestMatchers(HttpMethod.GET,"holidays/**").permitAll()
         );
         http.formLogin(withDefaults());
+        http.httpBasic(withDefaults());
         return http.build();
     }
+
+
 }

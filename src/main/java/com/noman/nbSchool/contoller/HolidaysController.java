@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Controller
 public class HolidaysController {
 
-    @GetMapping("/holidays/{display}")
+    @GetMapping("holidays/{display}")
     public String displayHolidays(@PathVariable String display, Model model) {
 
         List<Holiday> holidays = Arrays.asList(
