@@ -14,11 +14,20 @@ public class ProjectSecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/home","/about","/courses","/error","/assets/**").permitAll()
-                .requestMatchers(HttpMethod.GET,"contact").authenticated()
-                .requestMatchers(HttpMethod.GET,"holidays/**").permitAll()
+                .requestMatchers("/home", "/about", "/courses", "/error", "/assets/**", "/login").permitAll()
+                .requestMatchers(HttpMethod.GET, "contact").authenticated()
+                .requestMatchers(HttpMethod.GET, "dashboard").authenticated()
+                .requestMatchers(HttpMethod.GET, "holidays/**").permitAll()
         );
-        http.formLogin(withDefaults());
+        http.formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/dashboard")
+                .failureUrl("/login?error=true")
+                .permitAll());
+        http.logout(logout -> logout
+                .logoutSuccessUrl("/login?logout=true")
+                .invalidateHttpSession(true)
+        );
         http.httpBasic(withDefaults());
         return http.build();
     }
