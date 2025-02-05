@@ -13,8 +13,6 @@ public class DashBoardController {
         model.addAttribute("request", req);
         model.addAttribute("username", authentication.getName());
         model.addAttribute("roles", authentication.getAuthorities().toString());
-        System.out.println(model.getAttribute("username"));
-        System.out.println(model.getAttribute("roles"));
         return "dashboard.html";
     }
 }
