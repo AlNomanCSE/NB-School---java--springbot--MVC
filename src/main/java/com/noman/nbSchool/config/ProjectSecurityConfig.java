@@ -27,6 +27,8 @@ public class ProjectSecurityConfig {
         http.logout(logout -> logout
                 .logoutSuccessUrl("/login?logout=true")
                 .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
         );
         http.httpBasic(withDefaults());
         return http.build();
