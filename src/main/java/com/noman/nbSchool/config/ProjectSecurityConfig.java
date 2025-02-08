@@ -2,7 +2,6 @@ package com.noman.nbSchool.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -15,12 +14,13 @@ public class ProjectSecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/home", "/about", "/courses", "/error", "/assets/**", "/login","/saveMsg").permitAll()
-                .requestMatchers(HttpMethod.GET, "contact").permitAll()
-                .requestMatchers(HttpMethod.GET, "dashboard","/displayMessages").authenticated()
-                .requestMatchers(HttpMethod.GET, "holidays/**").permitAll()
+                .requestMatchers("contact").permitAll()
+                .requestMatchers("dashboard","/displayMessages").authenticated()
+                .requestMatchers( "holidays/**").permitAll()
+                .requestMatchers("/public/**").permitAll()
                 .anyRequest().denyAll()
         );
-        http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg"));
+        http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg","/public/**"));
         http.formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/dashboard")
