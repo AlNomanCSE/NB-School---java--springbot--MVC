@@ -19,6 +19,7 @@ public class ProjectSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "dashboard").authenticated()
                 .requestMatchers(HttpMethod.GET, "holidays/**").permitAll()
         );
+        http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg"));
         http.formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/dashboard")
