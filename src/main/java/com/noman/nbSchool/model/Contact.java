@@ -10,7 +10,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name="contact_message")
-public class Contact {
+public class Contact extends BaseEntity {
     //    Name the variable same as the form input name given in MVC
   /*
     * @NotNull: Checks if a given field is not null but allows empty values & zero elements inside collections.

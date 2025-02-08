@@ -16,7 +16,7 @@ public class ProjectSecurityConfig {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/home", "/about", "/courses", "/error", "/assets/**", "/login","/saveMsg").permitAll()
                 .requestMatchers(HttpMethod.GET, "contact").permitAll()
-                .requestMatchers(HttpMethod.GET, "dashboard").authenticated()
+                .requestMatchers(HttpMethod.GET, "dashboard","/displayMessages").authenticated()
                 .requestMatchers(HttpMethod.GET, "holidays/**").permitAll()
                 .anyRequest().denyAll()
         );

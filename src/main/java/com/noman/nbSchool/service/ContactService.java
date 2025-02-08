@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Slf4j
 @Service
@@ -21,4 +24,14 @@ public class ContactService {
         }
         return isSaved;
     }
+    public List<Contact> findAllMessages() {
+        Iterable<Contact> all = contactRepository.findAll();
+        List<Contact> messages = new ArrayList<>();
+        for (Contact contact : all) {
+            messages.add(contact);
+        }
+        return messages;
+    }
+
+
 }
