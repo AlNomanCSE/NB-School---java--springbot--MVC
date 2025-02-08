@@ -2,11 +2,12 @@ package com.noman.nbSchool.contoller;
 
 
 import com.noman.nbSchool.model.Contact;
+import com.noman.nbSchool.repository.ContactRepository;
 import com.noman.nbSchool.service.ContactService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -17,14 +18,11 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class ContactController {
 
-    private ContactService contactService;
-
-    @Autowired
-    public ContactController(ContactService contactService) {
-        this.contactService = contactService;
-    }
+    private final ContactRepository contactRepository;
+    private final ContactService contactService;
 
     @RequestMapping(value = "contact")
     public String contactPage(HttpServletRequest req, Model model) {
@@ -33,17 +31,29 @@ public class ContactController {
         return "contact.html";
     }
 
-    @RequestMapping(value = "saveMsg",method = POST)
-    public String saveMessage(@Valid @ModelAttribute("contact") Contact contact, Errors errors){
+    @RequestMapping(value = "/saveMsg", method = POST)
+    public String saveMessage(@Valid @ModelAttribute("contact") Contact contact, Errors errors, Model model,HttpServletRequest req) {
+        model.addAttribute("request", req);
+        log.info("save contact {}", contact);
 
-        if(errors.hasErrors()){
+        // If validation fails, return to the contact page with errors
+        if (errors.hasErrors()) {
             log.error("Contact form validation failed due to : " + errors.toString());
-            return "contact.html";
+            model.addAttribute("errors", errors); // Add errors to the model
+            return "contact"; // Return to the contact page (without .html extension)
         }
-        contactService.saveMessageDetails(contact);
+
+        // Save the message and redirect to the contact page
+        try {
+            contactService.saveMessageDetails(contact);
+        } catch (Exception e) {
+            log.error("Failed to save contact message: " + e.getMessage(), e);
+            model.addAttribute("errorMessage", "An unexpected error occurred while saving your message.");
+            return "contact"; // Return to the contact page with an error message
+        }
+
         return "redirect:/contact";
     }
-
 
 
 }

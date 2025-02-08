@@ -14,10 +14,11 @@ public class ProjectSecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
-                .requestMatchers("/home", "/about", "/courses", "/error", "/assets/**", "/login").permitAll()
-                .requestMatchers(HttpMethod.GET, "contact").authenticated()
+                .requestMatchers("/home", "/about", "/courses", "/error", "/assets/**", "/login","/saveMsg").permitAll()
+                .requestMatchers(HttpMethod.GET, "contact").permitAll()
                 .requestMatchers(HttpMethod.GET, "dashboard").authenticated()
                 .requestMatchers(HttpMethod.GET, "holidays/**").permitAll()
+                .anyRequest().denyAll()
         );
         http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg"));
         http.formLogin(form -> form

@@ -1,18 +1,27 @@
 package com.noman.nbSchool.model;
 
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import jakarta.persistence.*;
+import lombok.Data;
 
-@Getter
-@RequiredArgsConstructor
+@Data
+@Entity
+@Table(name = "holidays")
 public class Holiday {
-    private final String day;
-    private final String reason;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private  String day;
+
+    private  String reason;
+
+    @Enumerated(EnumType.STRING)
+    private  Type type;
 
     public enum Type {
         FESTIVAL, FEDERAL
     }
 
-    private final Type type;
 }

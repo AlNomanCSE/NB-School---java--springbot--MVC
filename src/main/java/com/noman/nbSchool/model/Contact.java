@@ -1,13 +1,15 @@
 package com.noman.nbSchool.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-
+@Entity
 @Data
+@Table(name="contact_message")
 public class Contact {
     //    Name the variable same as the form input name given in MVC
   /*
@@ -15,12 +17,18 @@ public class Contact {
       @NotEmpty: Checks if a given field is not null and its size/length is greater than zero.
       @NotBlank: Checks if a given field is not null and trimmed length is greater than zero.
     * */
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "contact_id")
+    private Long contactId;
+
     @NotBlank(message = "Name must not be blank")
     @Size(min = 3, message = "Name must be at least 3 characters long")
     private String name;
 
     @NotBlank(message = "Mobile number must not be blank")
     @Pattern(regexp = "(^$|[0-9]{11})", message = "Mobile number must be 10 digits")
+    @Column(name = "mobile_num")
     private String mobileNum;
 
     @NotBlank(message = "Email must not be blank")
