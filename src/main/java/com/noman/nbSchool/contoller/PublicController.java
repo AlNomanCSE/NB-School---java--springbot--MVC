@@ -2,6 +2,7 @@ package com.noman.nbSchool.contoller;
 
 
 import com.noman.nbSchool.model.Person;
+import com.noman.nbSchool.service.PersonService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/public")
 public class PublicController {
 
+    private final PersonService personService;
+
+    public PublicController(PersonService personService) {
+        this.personService = personService;
+    }
+
     @RequestMapping(value = "/register", method = {RequestMethod.GET})
     public String displayRegisterPage(Model model, HttpServletRequest req) {
         model.addAttribute("request", req);
@@ -30,7 +37,9 @@ public class PublicController {
         if (errors.hasErrors()) {
             return "register.html";
         }
-        return "redirect:/login?register=true";
+        boolean isSaved = personService.createPerson(person);
+        if(isSaved) return "redirect:/login?register=true";
+        return "register.html";
     }
 
 
