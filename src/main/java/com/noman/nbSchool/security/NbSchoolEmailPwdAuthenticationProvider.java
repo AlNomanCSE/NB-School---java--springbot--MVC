@@ -28,7 +28,7 @@ public class NbSchoolEmailPwdAuthenticationProvider implements AuthenticationPro
         String password = authentication.getCredentials().toString();
         Person personFound = personRepository.readByEmail(email);
 //        if (passwordEncoder.matches(password,personFound.getPwd())) {
-            return new UsernamePasswordAuthenticationToken(personFound.getName(), null, getGrantedAuthorities(personFound.getRoles()));
+            return new UsernamePasswordAuthenticationToken(email, null, getGrantedAuthorities(personFound.getRoles()));
 //        } else {
 //            throw new BadCredentialsException("Invalid credentials");
 //        }
