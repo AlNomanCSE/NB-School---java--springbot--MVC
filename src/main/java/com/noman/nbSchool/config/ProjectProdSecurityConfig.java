@@ -4,23 +4,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 
 @Configuration
-@Profile("!prod")
-public class ProjectSecurityConfig  {
+@Profile("prod")
+public class ProjectProdSecurityConfig {
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers("/home", "/about", "/courses", "/error", "/assets/**", "/login","/saveMsg").permitAll()
                 .requestMatchers("contact").permitAll()
-                .requestMatchers("dashboard").authenticated()
-                .requestMatchers("/displayMessages").hasRole("ADMIN")
+                .requestMatchers("dashboard","/displayMessages").authenticated()
                 .requestMatchers( "holidays/**").permitAll()
                 .requestMatchers("/public/**").permitAll()
                 .anyRequest().denyAll()
@@ -41,9 +38,5 @@ public class ProjectSecurityConfig  {
         return http.build();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
 
 }

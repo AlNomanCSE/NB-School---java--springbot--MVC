@@ -16,12 +16,16 @@ import org.hibernate.annotations.GenericGenerator;
         @FieldsValueMatch(
                 field = "pwd",
                 fieldMatch = "confirmPwd",
-                message = "Passwords do not match!"
+                message = "  if (!person.getPwd().equals(person.getConfirmPwd())) {\n" +
+                        "            throw new RuntimeException(\"Passwords do not match!\");\n" +
+                        "        }Passwords do not match!"
+
         ),
         @FieldsValueMatch(
                 field = "email",
                 fieldMatch = "confirmEmail",
                 message = "Email addresses do not match!"
+
         )
 })
 public class Person extends BaseEntity{
