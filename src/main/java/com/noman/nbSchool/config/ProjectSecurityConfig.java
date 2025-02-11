@@ -20,9 +20,11 @@ public class ProjectSecurityConfig  {
                 .requestMatchers("/home", "/about", "/courses", "/error", "/assets/**", "/login","/saveMsg").permitAll()
                 .requestMatchers("contact").permitAll()
                 .requestMatchers("dashboard").authenticated()
+                .requestMatchers("logout").authenticated()
                 .requestMatchers("/displayMessages").hasRole("ADMIN")
                 .requestMatchers( "holidays/**").permitAll()
                 .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/displayProfile").authenticated()
                 .anyRequest().denyAll()
         );
         http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg","/public/**"));
