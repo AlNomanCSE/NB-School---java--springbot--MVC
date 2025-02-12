@@ -37,6 +37,13 @@ public class PublicController {
         if (errors.hasErrors()) {
             return "register.html";
         }
+        // Manually validate password and confirm password
+        if (!person.getPwd().equals(person.getConfirmPwd())) {
+            errors.rejectValue("confirmPwd", "password.mismatch", "Passwords do not match!");
+            return "register.html";
+        }
+        // Set the registration name in request for auditing
+        req.setAttribute("registrationName", person.getName());
         boolean isSaved = personService.createPerson(person);
         if(isSaved) return "redirect:/login?register=true";
         return "register.html";

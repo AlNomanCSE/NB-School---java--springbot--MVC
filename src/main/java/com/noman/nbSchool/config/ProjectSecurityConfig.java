@@ -25,9 +25,10 @@ public class ProjectSecurityConfig  {
                 .requestMatchers( "holidays/**").permitAll()
                 .requestMatchers("/public/**").permitAll()
                 .requestMatchers("/displayProfile").authenticated()
+                .requestMatchers("/updateProfile").authenticated()
                 .anyRequest().denyAll()
         );
-        http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg","/public/**"));
+        http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg","/public/**","/updateProfile"));
         http.formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/dashboard")

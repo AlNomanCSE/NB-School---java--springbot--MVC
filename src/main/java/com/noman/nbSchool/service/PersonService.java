@@ -24,7 +24,7 @@ public class PersonService {
         String hashPwd = passwordEncoder.encode(person.getPwd());
         person.setPwd(hashPwd);
         person = personRepository.save(person);
-        if(null!=person && person.getPersonId()>0) isSaved = true;
+        if(null!=person) isSaved = true;
         return isSaved;
     }
 }

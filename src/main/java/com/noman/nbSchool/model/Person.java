@@ -1,6 +1,5 @@
 package com.noman.nbSchool.model;
 
-import com.noman.nbSchool.annotation.FieldsValueMatch;
 import com.noman.nbSchool.annotation.PasswordValidator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -8,31 +7,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.hibernate.annotations.GenericGenerator;
 
 @Data
 @Entity
-@FieldsValueMatch.List({
-        @FieldsValueMatch(
-                field = "pwd",
-                fieldMatch = "confirmPwd",
-                message = "  if (!person.getPwd().equals(person.getConfirmPwd())) {\n" +
-                        "            throw new RuntimeException(\"Passwords do not match!\");\n" +
-                        "        }Passwords do not match!"
-
-        ),
-        @FieldsValueMatch(
-                field = "email",
-                fieldMatch = "confirmEmail",
-                message = "Email addresses do not match!"
-
-        )
-})
 public class Person extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO,generator="native")
-    @GenericGenerator(name = "native",strategy = "native")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int personId;
 
     @NotBlank(message="Name must not be blank")
@@ -48,7 +29,7 @@ public class Person extends BaseEntity{
     private String email;
 
     @NotBlank(message="Confirm Email must not be blank")
-    @Email(message = "Please provide a valid confirm email address" )
+    @Email(message = "Please provide a valid confirm em il address" )
     @Transient
     private String confirmEmail;
 
