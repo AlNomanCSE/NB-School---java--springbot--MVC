@@ -22,13 +22,14 @@ public class ProjectSecurityConfig  {
                 .requestMatchers("dashboard").authenticated()
                 .requestMatchers("logout").authenticated()
                 .requestMatchers("/displayMessages").hasRole("ADMIN")
+                .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers( "holidays/**").permitAll()
                 .requestMatchers("/public/**").permitAll()
                 .requestMatchers("/displayProfile").authenticated()
                 .requestMatchers("/updateProfile").authenticated()
                 .anyRequest().denyAll()
         );
-        http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg","/public/**","/updateProfile"));
+        http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg","/public/**","/updateProfile","/admin/**"));
         http.formLogin(form -> form
                 .loginPage("/login")
                 .defaultSuccessUrl("/dashboard")

@@ -20,10 +20,12 @@ public class AuditAwareImpl implements AuditorAware<String> {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() ||
                 authentication instanceof AnonymousAuthenticationToken) {
-            // For registration, get the name from request if available
-            String registrationName = (String) request.getAttribute("registrationName");
-            return Optional.ofNullable(registrationName != null ? registrationName : "SYSTEM");
+            String auditor = "SYSTEM"; // Fallback value
+            System.out.println("Auditor: " + auditor);
+            return Optional.of(auditor);
         }
-        return Optional.ofNullable(authentication.getName());
+        String auditor = authentication.getName();
+        System.out.println("Auditor: " + auditor);
+        return Optional.of(auditor);
     }
 }
