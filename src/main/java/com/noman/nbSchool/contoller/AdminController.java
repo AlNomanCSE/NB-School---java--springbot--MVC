@@ -5,18 +5,18 @@ import com.noman.nbSchool.model.Person;
 import com.noman.nbSchool.repository.NbClassRepository;
 import com.noman.nbSchool.repository.PersonRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
@@ -53,4 +53,40 @@ public class AdminController {
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/displayClasses");
         return modelAndView;
     }
+    @GetMapping("/displayStudents")
+    public ModelAndView displayStudents(Model model, @RequestParam int classId, HttpSession session,
+                                        @RequestParam(value = "error", required = false) String error,HttpServletRequest req) {
+        String errorMessage = null;
+        model.addAttribute("request", req);
+        ModelAndView modelAndView = new ModelAndView("students.html");
+        Optional<NbClass> nbClass = nbClassRepository.findById(classId);
+        modelAndView.addObject("nbClass",nbClass.get());
+        modelAndView.addObject("person",new Person());
+        session.setAttribute("nbClass",nbClass.get());
+        if(error != null) {
+            errorMessage = "Invalid Email entered!!";
+            modelAndView.addObject("errorMessage", errorMessage);
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/addStudent")
+    public ModelAndView addStudent(Model model, @ModelAttribute("person") Person person, HttpSession session,HttpServletRequest req) {
+        model.addAttribute("request", req);
+        ModelAndView modelAndView = new ModelAndView();
+        NbClass nbClass = (NbClass) session.getAttribute("nbClass");
+        Person personEntity = personRepository.readByEmail(person.getEmail());
+        if(personEntity==null || !(personEntity.getPersonId()>0)){
+            modelAndView.setViewName("redirect:/admin/displayStudents?classId="+nbClass.getClassId()
+                    +"&error=true");
+            return modelAndView;
+        }
+        personEntity.setNbClass(nbClass);
+        personRepository.save(personEntity);
+        nbClass.getPersons().add(personEntity);
+        nbClassRepository.save(nbClass);
+        modelAndView.setViewName("redirect:/admin/displayStudents?classId="+nbClass.getClassId());
+        return modelAndView;
+    }
+
 }
