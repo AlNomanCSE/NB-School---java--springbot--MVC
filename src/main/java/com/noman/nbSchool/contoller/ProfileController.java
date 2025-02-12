@@ -4,14 +4,15 @@ import com.noman.nbSchool.model.Address;
 import com.noman.nbSchool.model.Person;
 import com.noman.nbSchool.model.Profile;
 import com.noman.nbSchool.repository.PersonRepository;
+import com.noman.nbSchool.validationGroups.OnProfileUpdate;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,13 +46,14 @@ public class ProfileController {
     }
 
     @PostMapping("/updateProfile")
-    public String updateProfile(@Valid @ModelAttribute("profile") Profile profile, Errors errors,
-                                HttpSession session,HttpServletRequest request,Model model)
+    public String updateProfile(@Validated(OnProfileUpdate.class) @ModelAttribute("profile") Profile profile, Errors errors,
+                                HttpSession session, HttpServletRequest request, Model model)
     {
         model.addAttribute("request", request);
         if(errors.hasErrors()){
             return "profile.html";
         }
+
         Person person = (Person) session.getAttribute("loggedInPerson");
         person.setName(profile.getName());
         person.setEmail(profile.getEmail());
@@ -59,14 +61,11 @@ public class ProfileController {
         if(person.getAddress() ==null || !(person.getAddress().getAddressId()>0)){
             person.setAddress(new Address());
         }
-        person.setConfirmPwd("");
-        person.setConfirmEmail("");
         person.getAddress().setAddress1(profile.getAddress1());
         person.getAddress().setAddress2(profile.getAddress2());
         person.getAddress().setCity(profile.getCity());
         person.getAddress().setState(profile.getState());
         person.getAddress().setZipCode(profile.getZipCode());
-        log.info("____________________________________"+person.toString()+"____________________________________");
         Person savedPerson = personRepository.save(person);
         session.setAttribute("loggedInPerson", savedPerson);
         return "redirect:/displayProfile";

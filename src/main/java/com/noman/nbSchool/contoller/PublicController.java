@@ -43,7 +43,7 @@ public class PublicController {
             return "register.html";
         }
         // Set the registration name in request for auditing
-        req.setAttribute("registrationName", person.getName());
+        req.setAttribute("registrationName", person.getEmail());
         boolean isSaved = personService.createPerson(person);
         if(isSaved) return "redirect:/login?register=true";
         return "register.html";
