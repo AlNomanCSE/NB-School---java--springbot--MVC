@@ -27,6 +27,7 @@ public class ProjectSecurityConfig  {
                 .requestMatchers("/public/**").permitAll()
                 .requestMatchers("/displayProfile").authenticated()
                 .requestMatchers("/updateProfile").authenticated()
+                .requestMatchers("/student/**").hasRole("STUDENT")
                 .anyRequest().denyAll()
         );
         http.csrf(csrfConfig->csrfConfig.ignoringRequestMatchers("/saveMsg","/public/**","/updateProfile","/admin/**"));

@@ -20,6 +20,9 @@ public class DashBoardController {
         model.addAttribute("request", req);
         model.addAttribute("username", person.getName());
         model.addAttribute("roles", authentication.getAuthorities().toString());
+        if(null != person.getNbClass() && null != person.getNbClass().getName()){
+            model.addAttribute("enrolledClass", person.getNbClass().getName());
+        }
         session.setAttribute("loggedInPerson", person);
         return "dashboard.html";
     }
