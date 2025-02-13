@@ -18,8 +18,8 @@ import java.util.Set;
 public class Person extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int personId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long personId;
 
     @NotBlank(message = "Name must not be blank", groups = {OnRegistration.class, OnProfileUpdate.class})
     @Size(min = 3, message = "Name must be at least 3 characters long", groups = {OnRegistration.class, OnProfileUpdate.class})
@@ -48,8 +48,7 @@ public class Person extends BaseEntity {
     @Transient
     private String confirmPwd;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST, targetEntity = Roles.class)
-    @JoinColumn(name = "role_id", referencedColumnName = "roleId", nullable = false)
+    @Enumerated(EnumType.STRING)  // Will store as 'STUDENT', 'ADMIN'
     private Roles roles;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, targetEntity = Address.class)

@@ -36,7 +36,7 @@ public class NbSchoolEmailPwdAuthenticationProvider implements AuthenticationPro
 
     private List<GrantedAuthority> getGrantedAuthorities(Roles roles) {
         List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + roles.getRoleName()));
+        grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + roles.name()));
         return grantedAuthorities;
     }
 

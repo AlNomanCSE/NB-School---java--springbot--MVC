@@ -3,27 +3,34 @@ package com.noman.nbSchool.service;
 import com.noman.nbSchool.model.Person;
 import com.noman.nbSchool.model.Roles;
 import com.noman.nbSchool.repository.PersonRepository;
-import com.noman.nbSchool.repository.RolesRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PersonService {
     private final PersonRepository personRepository;
-    private final RolesRepository rolesRepository;
     private final PasswordEncoder passwordEncoder;
 
     public boolean createPerson(Person person) {
         boolean isSaved = false;
-//        Setting role
-        Roles studentRole = rolesRepository.getByRoleName("STUDENT");
-        person.setRoles(studentRole);
 //        Setting hashPassword
+        Person to_be_saved_person= new Person();
+        to_be_saved_person.setName(person.getName());
+        to_be_saved_person.setEmail(person.getEmail());
+        to_be_saved_person.setMobileNumber(person.getMobileNumber());
+
+        to_be_saved_person.setRoles(Roles.STUDENT);
+
         String hashPwd = passwordEncoder.encode(person.getPwd());
-        person.setPwd(hashPwd);
-        person = personRepository.save(person);
+        to_be_saved_person.setPwd(hashPwd);
+        to_be_saved_person.setCreateBy(person.getEmail());
+        Person savedPerson = personRepository.save(to_be_saved_person);
+
+        log.info("Person -------------------- "+ savedPerson);
         if(null!=person) isSaved = true;
         return isSaved;
     }
