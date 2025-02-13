@@ -29,9 +29,7 @@ public class PersonService {
         to_be_saved_person.setPwd(hashPwd);
         to_be_saved_person.setCreateBy(person.getEmail());
         Person savedPerson = personRepository.save(to_be_saved_person);
-
-        log.info("Person -------------------- "+ savedPerson);
-        if(null!=person) isSaved = true;
+        if(null!=savedPerson) isSaved = true;
         return isSaved;
     }
 }
