@@ -1,6 +1,5 @@
 package com.noman.nbSchool.audit;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -12,8 +11,6 @@ import java.util.Optional;
 @Component("auditAwareImpl")
 @RequiredArgsConstructor
 public class AuditAwareImpl implements AuditorAware<String> {
-
-    private final HttpServletRequest request;
 
     @Override
     public Optional<String> getCurrentAuditor() {

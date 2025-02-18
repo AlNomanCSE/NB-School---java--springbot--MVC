@@ -5,6 +5,7 @@ import com.noman.nbSchool.model.Roles;
 import com.noman.nbSchool.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -25,13 +26,15 @@ public class NbSchoolEmailPwdAuthenticationProvider implements AuthenticationPro
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String email = authentication.getName();
-        String password = authentication.getCredentials().toString();
-        Person personFound = personRepository.readByEmail(email);
-//        if (passwordEncoder.matches(password,personFound.getPwd())) {
-            return new UsernamePasswordAuthenticationToken(email, null, getGrantedAuthorities(personFound.getRoles()));
-//        } else {
-//            throw new BadCredentialsException("Invalid credentials");
-//        }
+        String pwd = authentication.getCredentials().toString();
+        Person person = personRepository.readByEmail(email);
+        if(null != person && person.getPersonId()>0 &&
+                passwordEncoder.matches(pwd,person.getPwd())){
+            return new UsernamePasswordAuthenticationToken(
+                    email, null, getGrantedAuthorities(person.getRoles()));
+        }else{
+            throw new BadCredentialsException("Invalid credentials!");
+        }
     }
 
     private List<GrantedAuthority> getGrantedAuthorities(Roles roles) {
